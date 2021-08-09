@@ -33,9 +33,9 @@ if(isset($_POST['btnRegistreer'])){
         $wachtwoord = $_POST['wachtwoord'];
         $wachtwoordHerhaal = $_POST['txtWachtwoordHerhaal'];
     }else{
-        $error .= "Beide wachtwoordvelden moeten ingevuld worden. <br>"
+        $error .= "Beide wachtwoordvelden moeten ingevuld worden. <br>";
     }
     if($error == ""){
-        
+
     }
 }
