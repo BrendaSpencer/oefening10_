@@ -13,3 +13,29 @@ Herhaal wachtwoord: <input type="password" name="txtWachtwoordHerhaal"><br>
 <?php
 require_once('footer.php')
 ?>
+<?php
+require_once('user.php');
+
+$error = "";
+
+if(isset($_POST['btnRegistreer'])){
+    $email = "";
+    $wachtwoord = "";
+    $wachtwoordHerhaal = "";
+
+    if(!empty($_POST['txtEmail'])){
+        $email = $_POST['txtEmail'];
+    }else{
+        $error .= "Het emailadres moet ingevuld worden.<br>";
+    }
+
+    if(!empty($_POST['txtWachtwoord']) && !empty($_POST['txtWachtwoordHerhaal'])){
+        $wachtwoord = $_POST['wachtwoord'];
+        $wachtwoordHerhaal = $_POST['txtWachtwoordHerhaal'];
+    }else{
+        $error .= "Beide wachtwoordvelden moeten ingevuld worden. <br>"
+    }
+    if($error == ""){
+        
+    }
+}
