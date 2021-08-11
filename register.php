@@ -1,5 +1,8 @@
 <?php
 require_once('header.php');
+require_once("user.php");
+
+session_start();
 ?>
 
 <h1>Registreren</h1>
@@ -36,6 +39,18 @@ if(isset($_POST['btnRegistreer'])){
         $error .= "Beide wachtwoordvelden moeten ingevuld worden. <br>";
     }
     if($error == ""){
-
+        try {
+            $gebruiker = new User();
+            $gebruiker->setEmail($email);
+            $gebruiker->setWachtwoord($wachtwoord, $wachtwoordHerhaal);
+            $gebruiker=$gebruiker->register();
+            $_SESSION['gebruiker'] = serialize($gebruiker);
+        } catch (OngeldigEmailadresException $e){
+            $error .= "Het ingevulde emailadres is geen geldig emailadres.<br>";
+        }catch (WachtwoordenKomenNietOvereenException $e){
+            $error .= "De ingevulde wachtwoorden komen niet overeen.<br>";
+        }catch (GebruikerBestaatAlException $e){
+            $error .= "Er bestaat al een gebruiker met dit emailadres. <br>";
+        }
     }
 }
