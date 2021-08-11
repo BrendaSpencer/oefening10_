@@ -48,6 +48,18 @@ class user {
 
     public function register(){
         $rowCount = $this->emailReedsInGebruik();
+        if($rowCount > 0){
+            throw new GebruikerBestaatAlException();
+        }
+        $dbh = new PDO(BConfig::$DB_CONNSTRING, DBConfig::$DB_USER,DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare("insert into users (email, wachtwoord) values (:email, :wachtwoord)");
+        $stmt->bindValue(":email" , $this->email);
+        $stmt->bindValue(":wachtwoord" , $this->wachtwoord);
+        $stmt->execute();
+        $laatsteNieuweId = $dbh->lastInsertId();
+        $dbh = null;
+        $this->id =$laatsteNieuweId;
+        return $this;
         
     }
 
