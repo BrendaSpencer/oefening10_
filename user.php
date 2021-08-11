@@ -21,9 +21,34 @@ class user {
     }
 
     public function setEmail($email){
+        if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+            throw new OngeldigEmailadresException();
+        }
         $this->email = $email;
     }
-    public function setWachtwoord($wachtwoord){
-        $this->wachtwoord = $wachtwoord;
+    public function setWachtwoord($wachtwoord, $herhaalWachtwoord){
+        if($wachtwoord !== $herhaalWachtwoord){
+            throw new WachtwoordenKomenNietOvereenException();
+        }
+        $this->wachtwoord = password_hash($wachtwoord, PASSWORD_DEFAULT);
     }
+
+    public function emailReedsInGebruik(){
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USER,DBConfig::$DB_PASSWORD);
+
+        $stmt= $dbh->prepare("select * FROM users WHERE email = :email");
+        $stmt->bindValue(":email", $this->email);
+        $stmt->execute();
+
+        $rowCount = $stmt->rowCount();
+        $dbh = null;
+
+        return $rowCount;
+    }
+
+    public function register(){
+        $rowCount = $this->emailReedsInGebruik();
+        
+    }
+
 }
