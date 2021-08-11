@@ -3,8 +3,8 @@ require_once('header.php');
 require_once("user.php");
 
 session_start();
-?>
-<?php
+
+
 if($error == "" && isset($_SESSION['gebruiker'])){
     echo "U bent succesvol geregistreerd.";
 }else if ($error != ""){
