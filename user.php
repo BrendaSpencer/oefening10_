@@ -63,4 +63,25 @@ class user {
         
     }
 
+    public function login(){
+        $rowCount = $this->emailReedsInGebruik();
+        if($rowCount == 0){
+            throw new GebruikerBestaatNietException();
+        }
+
+        $dbh = new PDO(BConfig::$DB_CONNSTRING, DBConfig::$DB_USER,DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare("select id, wachtwoord From users where email = :email");
+        $stmt->bindValue(":email" , $this->email);
+        $stmt->execute();
+        $resultSet = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $isWachtwoordCorrect = password_verify($this->wachtwoord, $resultSet['wachtwoord']);
+        if(!$isWachtwoordCorrect){
+            throw new WachtwoordIncorrectException();
+        }
+        $this->id = $resultSet['id'];
+        $dbh = null;
+        return $this;
+    }
+
 }
